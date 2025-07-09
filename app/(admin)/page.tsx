@@ -1,22 +1,28 @@
-"use client";
+import { LoginForm } from "@/components/pages/login-form";
+import { verifyToken } from "@/lib/helper";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { UploadButton } from "@/src/utils/uploadthing";
+export default async function Page() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("phoenix-token");
+  let navigateToDashboard = false;
+  try {
+    await verifyToken(token?.value || "");
+    // If token is valid, redirect immediately
+    navigateToDashboard = true;
+  } catch (error) {
+    // If token is invalid, fall through and show login form
+    console.log("error", error);
+  }
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <UploadButton
-        endpoint="imageUploader"
-        onClientUploadComplete={(res) => {
-          // Do something with the response
-          console.log("Files: ", res);
-          alert("Upload Completed");
-        }}
-        onUploadError={(error: Error) => {
-          // Do something with the error.
-          alert(`ERROR! ${error.message}`);
-        }}
-      />
-    </main>
-  );
+  if (navigateToDashboard) {
+    redirect("/dashboard");
+  } else {
+    return (
+      <div className="flex min-h-screen items-center justify-center w-full">
+        <LoginForm />
+      </div>
+    );
+  }
 }

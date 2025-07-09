@@ -12,6 +12,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") 
 }
 
 model UserDetails {
@@ -30,6 +31,7 @@ model UserDetails {
   reports       Reports[]
   purchases     PurchaseHistory[]
   isAdmin       Boolean          @default(false)    // Controls user's admin access rights
+  password      String?
 }
 
 model Package {

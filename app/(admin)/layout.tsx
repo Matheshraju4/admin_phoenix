@@ -1,17 +1,15 @@
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit } from "next/font/google";
 
 import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { Toaster } from "sonner";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/reusable/app-sidebar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export default function RootLayout({
@@ -21,9 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${outfit.className} antialiased`}>
         <NextSSRPlugin
           /**
            * The `extractRouterConfig` will extract **only** the route configs
@@ -33,8 +29,17 @@ export default function RootLayout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-        {children}
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="w-full ">
+            <SidebarTrigger className="hover:bg-primary/10" />
+            {children}
+            <Toaster richColors />
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );
 }
+
+
