@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserDetails {
+  id            String           @id @default(uuid())
+  phoneNumber   String            @unique
+  name          String?
+  email         String?          
+  address       String?
+  gender        String?
+  age           String?
+  nextVisitDate DateTime?
+  createdAt     DateTime         @default(now())
+  modifiedAt    DateTime         @updatedAt
+  jwtToken      String ?         @unique
+  recentOtp     String?
+  reports       Reports[]
+  purchases     PurchaseHistory[]
+  isAdmin       Boolean          @default(false)    // Controls user's admin access rights
+}
+
+model Package {
+  id             String           @id @default(uuid())
+  title          String
+  description    String
+  prePreparation String?
+  flow           String
+  testsCount     Int
+  terms          String
+  price          Decimal         @db.Decimal(10, 2)
+  createdAt      DateTime        @default(now())
+  modifiedAt     DateTime        @updatedAt
+  tests          Test[]
+  purchases      PurchaseHistory[]
+  type           String?
+  typeOfPackage PackageType?
+
+}
+enum PackageType {
+  Profile
+  Package
+  Scan
+}
+
+model Test {
+  id             String    @id @default(uuid())
+  title          String
+  description    String
+  prePreparation String?
+  flow           String
+  terms          String
+  price          Decimal   @db.Decimal(10, 2)
+  packageId      String?
+  package        Package?  @relation(fields: [packageId], references: [id])
+  createdAt      DateTime  @default(now())
+  modifiedAt     DateTime  @updatedAt
+  purchases      PurchaseHistory[]
+  type           String?
+  isScan Boolean? @default(false)
+  isVisible Boolean? @default(true)
+}
+
+model Reports {
+
+  id         String      @id @default(uuid())
+  reportName String?
+  DoctorName String?
+  userId     String
+  reportFileUrl String
+  reportFileName String
+  date       DateTime?   @default(now())
+  createdAt  DateTime    @default(now())
+  modifiedAt DateTime    @updatedAt
+  user       UserDetails @relation(fields: [userId], references: [id])
+}
+
+model PurchaseHistory {
+  id          String      @id @default(uuid())
+  userId      String
+  order_Id    String      @unique
+  razorpay_payment_id String?
+  packageId   String?
+  packageName String?
+  testId      String?
+  testName    String?
+  optedLocation String?
+  amount String?
+  isPaid      Status?
+  date        String?     // Store as "DD-MM-YYYY HH:mm" (Indian format)
+  createdAt   DateTime    @default(now())
+  modifiedAt  DateTime    @updatedAt
+  user        UserDetails @relation(fields: [userId], references: [id])
+  package     Package?    @relation(fields: [packageId], references: [id])
+  test        Test?       @relation(fields: [testId], references: [id])
+  isScan Boolean? @default(false)
+}
+
+enum Status {
+  Paid
+  Pending
+}
