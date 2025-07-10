@@ -31,7 +31,7 @@ model UserDetails {
   reports       Reports[]
   purchases     PurchaseHistory[]
   isAdmin       Boolean          @default(false)    // Controls user's admin access rights
-  password      String?
+  
 }
 
 model Package {
