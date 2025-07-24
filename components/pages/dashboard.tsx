@@ -79,7 +79,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-primary/10 via-white to-secondary/10 px-2">
+    <div className="mx-auto w-full h-full bg-primary/10 p-2">
       <div className="bg-white border border-gray-100 rounded-2xl shadow-2xl w-full max-w-xl mx-auto p-3 sm:p-6">
         <div className="flex items-center gap-2 sm:gap-3 mb-2">
           <span className="inline-flex items-center justify-center bg-primary/10 text-primary rounded-full p-2">

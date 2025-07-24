@@ -36,7 +36,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="bg-primary/10">
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className=" ">
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -44,7 +44,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild className=" hover:bg-white">
                     <a href={item.url}>
-                      <item.icon />
+                      <item.icon className="w-6 h-6" />
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>

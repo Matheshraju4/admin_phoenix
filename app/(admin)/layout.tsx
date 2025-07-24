@@ -31,10 +31,16 @@ export default function RootLayout({
         />
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full ">
-            <SidebarTrigger className="hover:bg-primary/10" />
-            {children}
-            <Toaster richColors />
+          <main className="w-full  ">
+            <div className="flex gap-5 items-center p-5 bg-white shadow-sm">
+              <SidebarTrigger className="hover:bg-primary/10" />
+              <h1 className="text-2xl font-bold ">Admin Dashboard</h1>
+            </div>
+            <div className="">
+              {children}
+              <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+              <Toaster richColors />
+            </div>
           </main>
         </SidebarProvider>
       </body>
